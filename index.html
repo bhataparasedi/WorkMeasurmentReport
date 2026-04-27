@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work Management System</title>
+
+<style>
+body { font-family: Arial; background: #eef2f7; margin: 0; }
+
+.header {
+    background: #1e3a8a;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.container {
+    max-width: 950px;
+    margin: auto;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+input, select {
+    padding: 8px;
+    width: 100%;
+}
+
+#sr { background: #eee; }
+
+button {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+}
+
+.add { background: #16a34a; }
+.clear { background: #dc2626; }
+.download { background: #2563eb; }
+.copy { background: #7c3aed; }
+.print { background: #f59e0b; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    background: #1e3a8a;
+    color: white;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: center;
+}
+
+/* A4 Print Setup */
+@page {
+    size: A4;
+    margin: 10mm;
+}
+
+@media print {
+
+    html, body {
+        width: 210mm;
+        height: 297mm;
+        background: white;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    #tableArea, #tableArea * {
+        visibility: visible;
+    }
+
+    #tableArea {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    #credit {
+        visibility: visible;
+        position: fixed;
+        bottom: 5mm;
+        right: 10mm;
+        font-size: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        font-size: 11px;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 4px;
+        word-wrap: break-word;
+    }
+}
+
+/* Column Width */
+th:nth-child(1), td:nth-child(1) { width: 5%; }
+th:nth-child(2), td:nth-child(2) { width: 10%; }
+th:nth-child(3), td:nth-child(3) { width: 12%; }
+th:nth-child(4), td:nth-child(4) { width: 10%; }
+
+th:nth-child(5), td:nth-child(5),
+th:nth-child(6), td:nth-child(6),
+th:nth-child(7), td:nth-child(7) { width: 6%; }
+
+th:nth-child(8), td:nth-child(8) { width: 10%; }
+th:nth-child(9), td:nth-child(9) { width: 6%; }
+th:nth-child(10), td:nth-child(10) { width: 10%; }
+th:nth-child(11), td:nth-child(11) { width: 7%; }
+th:nth-child(12), td:nth-child(12) { width: 8%; }
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h2>AMBUJA FOUNDATION</h2>
+<div>Work Measurement Report</div>
+<div id="date"></div>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<div class="grid">
+<input id="sr" readonly>
+<input id="village" placeholder="Village">
+<input id="vendor" placeholder="Vendor Name">
+
+<select id="nature">
+<option>Farm Pond</option>
+<option>Doha Model</option>
+</select>
+
+<input id="l" placeholder="Length (m)">
+<input id="w" placeholder="Width (m)">
+<input id="h" placeholder="Height (m)">
+
+<input id="q" placeholder="Quantity">
+<input id="r" placeholder="Rate">
+</div>
+
+<div style="margin-top:10px;">
+<button class="add" onclick="addEntry()">Add Entry</button>
+<button class="clear" onclick="clearForm()">Clear</button>
+</div>
+
+</div>
+
+<div class="card" id="tableArea"></div>
+
+<div style="text-align:center;">
+<button class="copy" onclick="copyTable()">Copy</button>
+<button class="download" onclick="downloadCSV()">Download Excel</button>
+<button class="print" onclick="window.print()">Print</button>
+</div>
+
+<!-- Creator -->
+<div id="credit" style="text-align:right; margin-top:10px; font-size:12px; color:#555;">
+Created by: <b>Vikash Verma</b>
+</div>
+
+</div>
+
+<script>
+
+document.getElementById("date").innerText = "Date: " + new Date().toLocaleDateString();
+
+let data = [];
+document.getElementById("sr").value = 1;
+
+function addEntry(){
+
+let sr = data.length + 1;
+let village = document.getElementById("village").value;
+let vendor = document.getElementById("vendor").value;
+let nature = document.getElementById("nature").value;
+
+let l = +document.getElementById("l").value;
+let w = +document.getElementById("w").value;
+let h = +document.getElementById("h").value;
+let q = +document.getElementById("q").value;
+let r = +document.getElementById("r").value;
+
+if(!village || !vendor || !l || !w || !h || !q || !r){
+    alert("⚠️ Please fill all fields");
+    return;
+}
+
+let volume = (l*w*h).toFixed(2);
+let scope = (volume*q).toFixed(2);
+let amount = (scope*r).toFixed(2);
+
+data.push({
+sr,
+village,
+vendor,
+nature,
+l,
+w,
+h,
+volume: parseFloat(volume),
+q,
+scope: parseFloat(scope),
+r,
+amount: parseFloat(amount)
+});
+
+renderTable();
+clearForm();
+}
+
+function renderTable(){
+
+let html = `
+<table id="excelTable">
+<tr>
+<th>Sr.No</th>
+<th>Village</th>
+<th>Vendor Name</th>
+<th>Nature of work</th>
+<th>Length</th>
+<th>Width</th>
+<th>Height</th>
+<th>Volume (in cubic meter)</th>
+<th>Quantity</th>
+<th>Scope of work (In Cubic mtr)</th>
+<th>Rate</th>
+<th>Amount</th>
+</tr>
+`;
+
+data.forEach(d=>{
+html += `
+<tr>
+<td>${d.sr}</td>
+<td>${d.village}</td>
+<td>${d.vendor}</td>
+<td>${d.nature}</td>
+<td>${d.l}</td>
+<td>${d.w}</td>
+<td>${d.h}</td>
+<td>${d.volume.toFixed(2)}</td>
+<td>${d.q}</td>
+<td>${d.scope.toFixed(2)}</td>
+<td>${d.r}</td>
+<td>${d.amount.toFixed(2)}</td>
+</tr>
+`;
+});
+
+html += "</table>";
+
+document.getElementById("tableArea").innerHTML = html;
+}
+
+function clearForm(){
+document.getElementById("sr").value = data.length + 1;
+document.getElementById("village").value="";
+document.getElementById("vendor").value="";
+document.getElementById("l").value="";
+document.getElementById("w").value="";
+document.getElementById("h").value="";
+document.getElementById("q").value="";
+document.getElementById("r").value="";
+}
+
+function copyTable(){
+let table = document.getElementById("excelTable");
+let range = document.createRange();
+range.selectNode(table);
+window.getSelection().removeAllRanges();
+window.getSelection().addRange(range);
+document.execCommand("copy");
+alert("Copied!");
+}
+
+function downloadCSV(){
+
+let csv = "Sr.No,Village,Vendor Name,Nature of work,Length,Width,Height,Volume (in cubic meter),Quantity,Scope of work (In Cubic mtr),Rate,Amount\n";
+
+data.forEach(d=>{
+csv += `${d.sr},${d.village},${d.vendor},${d.nature},${d.l},${d.w},${d.h},${d.volume.toFixed(2)},${d.q},${d.scope.toFixed(2)},${d.r},${d.amount.toFixed(2)}\n`;
+});
+
+let blob = new Blob([csv], { type: 'text/csv' });
+let a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "work_report.csv";
+a.click();
+}
+
+</script>
+
+</body>
+</html>
