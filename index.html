@@ -2,88 +2,118 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Work Management System</title>
+<title>AMBUJA Foundation Work System</title>
 
 <style>
-body { font-family: Arial; background: #eef2f7; margin: 0; }
 
-.header {
-    background: #1e3a8a;
-    color: white;
-    padding: 15px;
-    text-align: center;
+/* ===== BACKGROUND (RESTORED) ===== */
+body {
+    font-family: Arial;
+    margin: 0;
+    background: linear-gradient(135deg, #f1f5f9, #cbd5e1);	
 }
 
+/* ===== HEADER ===== */
+.header {
+    background: rgba(255,255,255,0.9);
+    color: #1e3a8a;
+    padding: 15px;
+    text-align: center;
+    border-bottom: 2px solid #1e3a8a;
+}
+
+/* ===== CONTAINER ===== */
 .container {
     max-width: 950px;
     margin: auto;
     padding: 15px;
 }
 
+/* ===== GLASS CARD ===== */
 .card {
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 20px;
     margin-bottom: 15px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
+/* ===== GRID FIX (NO OVERFLOW) ===== */
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 12px;
+}
+
+@media (max-width: 700px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== INPUT FIX ===== */
+.input-box {
+    margin-bottom: 12px;
 }
 
 input, select {
-    padding: 8px;
     width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.9);
+    box-sizing: border-box;
 }
 
-#sr { background: #eee; }
-
+/* ===== BUTTONS ===== */
 button {
-    padding: 10px;
+    padding: 10px 15px;
     margin: 5px;
     border: none;
     color: white;
-    border-radius: 5px;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 .add { background: #16a34a; }
 .clear { background: #dc2626; }
-.download { background: #2563eb; }
 .copy { background: #7c3aed; }
+.download { background: #2563eb; }
 .print { background: #f59e0b; }
 
+button:hover {
+    transform: scale(1.05);
+}
+
+/* ===== TABLE ===== */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    background: rgba(255,255,255,0.2);
 }
 
 th {
-    background: #1e3a8a;
+    background: rgba(30,58,138,0.9);
     color: white;
 }
 
 th, td {
-    border: 1px solid #ccc;
+    border: 1px solid rgba(255,255,255,0.3);
     padding: 6px;
     text-align: center;
 }
 
-/* A4 Print Setup */
+/* ===== PRINT ===== */
 @page {
     size: A4;
     margin: 10mm;
 }
 
 @media print {
-
-    html, body {
-        width: 210mm;
-        height: 297mm;
-        background: white;
-    }
 
     body * {
         visibility: hidden;
@@ -100,6 +130,17 @@ th, td {
         width: 100%;
     }
 
+    table {
+        width: 100%;
+        font-size: 11px;
+        background: white;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 4px;
+    }
+
     #credit {
         visibility: visible;
         position: fixed;
@@ -107,68 +148,55 @@ th, td {
         right: 10mm;
         font-size: 10px;
     }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-        font-size: 11px;
-    }
-
-    th, td {
-        border: 1px solid black;
-        padding: 4px;
-        word-wrap: break-word;
-    }
 }
-
-/* Column Width */
-th:nth-child(1), td:nth-child(1) { width: 5%; }
-th:nth-child(2), td:nth-child(2) { width: 10%; }
-th:nth-child(3), td:nth-child(3) { width: 12%; }
-th:nth-child(4), td:nth-child(4) { width: 10%; }
-
-th:nth-child(5), td:nth-child(5),
-th:nth-child(6), td:nth-child(6),
-th:nth-child(7), td:nth-child(7) { width: 6%; }
-
-th:nth-child(8), td:nth-child(8) { width: 10%; }
-th:nth-child(9), td:nth-child(9) { width: 6%; }
-th:nth-child(10), td:nth-child(10) { width: 10%; }
-th:nth-child(11), td:nth-child(11) { width: 7%; }
-th:nth-child(12), td:nth-child(12) { width: 8%; }
 
 </style>
 </head>
 
 <body>
 
-<div class="header">
-<h2>AMBUJA FOUNDATION</h2>
-<div>Work Measurement Report</div>
-<div id="date"></div>
+<!-- HEADER -->
+<div class="header" style="display:flex; align-items:center; justify-content:center; gap:15px; flex-wrap:wrap; text-align:center;">
+
+<!-- Logo -->
+<img src="https://media.licdn.com/dms/image/v2/D4D0BAQGxVaK1Jl_LAA/company-logo_200_200/company-logo_200_200/0/1715755178720/ambuja_foundation_logo?e=2147483647&v=beta&t=_p4bfAX0L-JS_vWOmnk-eE4GEv70zhiNCqL8N5z_WT0" 
+alt="Ambuja Foundation Logo"
+style="height:80px; background:white; padding:5px; border-radius:6px;">
+
+<!-- Text -->
+<div>
+<h2 style="margin:0; font-size:23px; letter-spacing:1px;">AMBUJA FOUNDATION</h2>
+<div style="font-size:16px;">Work Measurement Report</div>
+<div id="date" style="font-size:14px;"></div>
+</div>
+
+</div>
+
 </div>
 
 <div class="container">
 
+<!-- FORM -->
 <div class="card">
 
 <div class="grid">
-<input id="sr" readonly>
+
+<input id="sr" readonly placeholder="Sr.No">
 <input id="village" placeholder="Village">
 <input id="vendor" placeholder="Vendor Name">
 
 <select id="nature">
+<option value="">Select Nature of Work</option>
 <option>Farm Pond</option>
 <option>Doha Model</option>
 </select>
 
-<input id="l" placeholder="Length (m)">
-<input id="w" placeholder="Width (m)">
-<input id="h" placeholder="Height (m)">
+<input id="l" type="number" min="0" step="any" placeholder="Length (m)">
+<input id="w" type="number" min="0" step="any" placeholder="Width (m)">
+<input id="h" type="number" min="0" step="any" placeholder="Height (m)">
+<input id="q" type="number" min="0" step="1" placeholder="Quantity">
+<input id="r" type="number" min="0" step="any" placeholder="Rate">
 
-<input id="q" placeholder="Quantity">
-<input id="r" placeholder="Rate">
 </div>
 
 <div style="margin-top:10px;">
@@ -178,16 +206,16 @@ th:nth-child(12), td:nth-child(12) { width: 8%; }
 
 </div>
 
+<!-- TABLE -->
 <div class="card" id="tableArea"></div>
 
 <div style="text-align:center;">
 <button class="copy" onclick="copyTable()">Copy</button>
-<button class="download" onclick="downloadCSV()">Download Excel</button>
+<button class="download" onclick="downloadCSV()">Download</button>
 <button class="print" onclick="window.print()">Print</button>
 </div>
 
-<!-- Creator -->
-<div id="credit" style="text-align:right; margin-top:10px; font-size:12px; color:#555;">
+<div id="credit" style="text-align:right; margin-top:10px; font-size:12px; color:#000000;">
 Created by: <b>Vikash Verma</b>
 </div>
 
@@ -195,11 +223,13 @@ Created by: <b>Vikash Verma</b>
 
 <script>
 
-document.getElementById("date").innerText = "Date: " + new Date().toLocaleDateString();
+document.getElementById("date").innerText =
+"Date: " + new Date().toLocaleDateString();
 
 let data = [];
 document.getElementById("sr").value = 1;
 
+/* ===== ADD ENTRY ===== */
 function addEntry(){
 
 let sr = data.length + 1;
@@ -213,9 +243,9 @@ let h = +document.getElementById("h").value;
 let q = +document.getElementById("q").value;
 let r = +document.getElementById("r").value;
 
-if(!village || !vendor || !l || !w || !h || !q || !r){
-    alert("⚠️ Please fill all fields");
-    return;
+if(!village || !vendor || !nature || !l || !w || !h || !q || !r){
+alert("⚠️ Please fill all fields");
+return;
 }
 
 let volume = (l*w*h).toFixed(2);
@@ -223,47 +253,26 @@ let scope = (volume*q).toFixed(2);
 let amount = (scope*r).toFixed(2);
 
 data.push({
-sr,
-village,
-vendor,
-nature,
-l,
-w,
-h,
-volume: parseFloat(volume),
-q,
-scope: parseFloat(scope),
-r,
-amount: parseFloat(amount)
+sr,village,vendor,nature,l,w,h,
+volume,q,scope,r,amount
 });
 
 renderTable();
 clearForm();
 }
 
+/* ===== TABLE ===== */
 function renderTable(){
 
-let html = `
-<table id="excelTable">
+let html = `<table>
 <tr>
-<th>Sr.No</th>
-<th>Village</th>
-<th>Vendor Name</th>
-<th>Nature of work</th>
-<th>Length</th>
-<th>Width</th>
-<th>Height</th>
-<th>Volume (in cubic meter)</th>
-<th>Quantity</th>
-<th>Scope of work (In Cubic mtr)</th>
-<th>Rate</th>
-<th>Amount</th>
-</tr>
-`;
+<th>Sr</th><th>Village</th><th>Vendor</th><th>Nature</th>
+<th>L</th><th>W</th><th>H</th>
+<th>Volume</th><th>Qty</th><th>Scope</th><th>Rate</th><th>Amount</th>
+</tr>`;
 
 data.forEach(d=>{
-html += `
-<tr>
+html += `<tr>
 <td>${d.sr}</td>
 <td>${d.village}</td>
 <td>${d.vendor}</td>
@@ -271,33 +280,29 @@ html += `
 <td>${d.l}</td>
 <td>${d.w}</td>
 <td>${d.h}</td>
-<td>${d.volume.toFixed(2)}</td>
+<td>${d.volume}</td>
 <td>${d.q}</td>
-<td>${d.scope.toFixed(2)}</td>
+<td>${d.scope}</td>
 <td>${d.r}</td>
-<td>${d.amount.toFixed(2)}</td>
-</tr>
-`;
+<td>${d.amount}</td>
+</tr>`;
 });
 
 html += "</table>";
-
 document.getElementById("tableArea").innerHTML = html;
 }
 
+/* ===== CLEAR ===== */
 function clearForm(){
 document.getElementById("sr").value = data.length + 1;
-document.getElementById("village").value="";
-document.getElementById("vendor").value="";
-document.getElementById("l").value="";
-document.getElementById("w").value="";
-document.getElementById("h").value="";
-document.getElementById("q").value="";
-document.getElementById("r").value="";
+["village","vendor","nature","l","w","h","q","r"].forEach(id=>{
+document.getElementById(id).value="";
+});
 }
 
+/* ===== COPY ===== */
 function copyTable(){
-let table = document.getElementById("excelTable");
+let table = document.getElementById("tableArea");
 let range = document.createRange();
 range.selectNode(table);
 window.getSelection().removeAllRanges();
@@ -306,18 +311,16 @@ document.execCommand("copy");
 alert("Copied!");
 }
 
+/* ===== CSV ===== */
 function downloadCSV(){
-
-let csv = "Sr.No,Village,Vendor Name,Nature of work,Length,Width,Height,Volume (in cubic meter),Quantity,Scope of work (In Cubic mtr),Rate,Amount\n";
-
+let csv="Sr,Village,Vendor,Nature,L,W,H,Volume,Qty,Scope,Rate,Amount\n";
 data.forEach(d=>{
-csv += `${d.sr},${d.village},${d.vendor},${d.nature},${d.l},${d.w},${d.h},${d.volume.toFixed(2)},${d.q},${d.scope.toFixed(2)},${d.r},${d.amount.toFixed(2)}\n`;
+csv+=`${d.sr},${d.village},${d.vendor},${d.nature},${d.l},${d.w},${d.h},${d.volume},${d.q},${d.scope},${d.r},${d.amount}\n`;
 });
-
-let blob = new Blob([csv], { type: 'text/csv' });
-let a = document.createElement("a");
-a.href = URL.createObjectURL(blob);
-a.download = "work_report.csv";
+let blob=new Blob([csv],{type:"text/csv"});
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="report.csv";
 a.click();
 }
 
